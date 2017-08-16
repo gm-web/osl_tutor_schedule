@@ -43,6 +43,78 @@ function sec_session_start() {
 	session_regenerate_id();    // regenerated the session, delete the old one. 
 }
 
+function user_check($mysqli, $email) {
+
+	$prep_stmt = "SELECT id FROM members WHERE email = ? LIMIT 1";
+	$stmt = $mysqli->prepare($prep_stmt);
+
+	if ($stmt) {
+		$stmt->bind_param('s', $email);
+		$stmt->execute();
+		$stmt->store_result();
+
+		if ($stmt->num_rows == 1) {
+			// the email is valid and the user exists
+			return true;
+		}
+		else {
+			return false;
+		}
+	} 
+	else {
+		return false;
+	}
+}
+
+function recovery_login($mysqli, $code, $email) {
+	if ($stmt = $mysqli->prepare("SELECT id, username FROM members")) {
+		$stmt->bind_param('s', $email);
+		$stmt->execute();
+		$stmt->store_result();
+
+		$stmt->bind_result($user_id, $username, $recovery_code);
+		$stmt->fetch();
+
+		if($stmt->num_rows == 1) {
+			if ($recovery_code == 0) {
+				return false;
+			}
+			else {
+				if ($recovery_code == $code) {
+					//code is correct
+					//log in
+					// Get the user-agent string of the user.
+					$user_browser = $_SERVER['HTTP_USER_AGENT'];
+
+					// XSS protection as we might print this value
+					$user_id = preg_replace("/[^0-9]+/", "", $user_id);
+					$_SESSION['user_id'] = $user_id;
+
+					// XSS protection as we might print this value
+					$username = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $username);
+
+					$_SESSION['username'] = $username;
+					$_SESSION['login_string'] = hash('sha512', $code . $user_browser);
+
+					// Login successful. 
+					return true;
+				}
+				else {
+					//recovery code entered was incorrect
+					return false;
+				}
+			}
+		}
+		else {
+			return false;
+		}
+	}
+	else {
+		header("Location: ../error.php?err=Database error: cannot prepare statement");
+		exit();
+	}
+}
+
 function login($email, $password, $mysqli) {
 	// Using prepared statements means that SQL injection is not possible. 
 	if ($stmt = $mysqli->prepare("SELECT id, username, password, salt 
@@ -248,30 +320,33 @@ function sa_check($mysqli) {
 }
 
 function list_users($mysqli) {
-	$stmt = $mysqli->prepare("SELECT name FROM tutors");
-	$results = $stmt->execute();
-	//$stmt = "SELECT name FROM tutors";
-	//$results = $stmt->execute();
-	if($results->num_rows > 0) {
+	$stmt = "SELECT name FROM tutors";
+	$result = $mysqli->query($stmt);
+	if($result->num_rows > 0) {
 		echo 
-			"<table>\\
-				<thead>\\
-					<tr>\\
-						<th>Name</th>\\
-						<th>Status</th>\\
-						<th>Email</th>\\
-						<th>Schedule</th>\\
-						<th>Classes</th>\\
-					</tr>\\
-				</thead>\\";
-		while($row = $results->fetch_assoc()) {
-			return $row.["name"];
-			
+			"<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Status</th>
+						<th>Email</th>
+						<th>Schedule</th>
+						<th>Classes</th>
+						<th>Edit</th>
+					</tr>
+				</thead>";
+		while ($row = $result->fetch_assoc()) {
 			echo
-			"<tbody>\\
-				<tr>\\
-					<td>" + $row["name"] + "</td>\\
+			"<tbody>
+				<tr>
+					<td>" . $row['name'] . "</td>
+					<td>" . /* $row['status'] */"<span class=\"new badge blue\">Current Tutor</span>" . "</td>
+					<td>" . /*$row['email']*/"example@domain.com" . "</td>
+					<td><a href=\"#\"><i class=\"material-icons\">event</i></a></td>
+					<td><a href=\"#\"><i class=\"material-icons\">view_list</i></a></td>
+					<td><a href=\"#\"><i class=\"material-icons\">create</i></a></td>
 				</tr>";
+
 		}
 		echo "</tbody></table>";
 	}

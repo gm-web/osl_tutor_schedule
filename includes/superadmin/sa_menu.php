@@ -13,8 +13,6 @@
 	<ul id="schedule_dd" class="dropdown-content">
 		<li><a id="view">View Schedule</a></li>
 		<li><a id="edit_schedule">Edit Schedule</a></li>
-		<li class="divider"></li>
-		<li><a id="recalc">Recalculate Schedule</a></li>
 	</ul>
 	<ul id="users_dd" class="dropdown-content">
 		<li><a id="view_users">View Users</a></li>

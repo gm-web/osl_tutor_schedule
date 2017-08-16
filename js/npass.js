@@ -32,20 +32,21 @@ function formhash(form, password) {
     form.submit();
 }
 
-function regformhash(form, uid, email, password, conf) {
+function newpass(form, password, conf, val) {
     // Check each field has a value
-    if (email.value == '' || uid.value == '' || password.value == '' || conf.value == '') {
+    if (password.value == '' || conf.value == '') {
         alert('You must provide all the requested details. Please try again');
         return false;
     }
-    
-    // Check the username
-    re = /^\w+$/; 
-    if(!re.test(form.username.value)) { 
-        alert("Username must contain only letters, numbers and underscores. Please try again"); 
-        form.username.focus();
-        return false; 
+    /* if (password.value == '') {
+        alert('theres a problem with the password');
+        return false;
     }
+
+    if (conf.value == '') {
+        alert('theres a problem with the confirmation');
+        return false;
+    } */
     
     // Check that the password is sufficiently long (min 6 chars)
     // The check is duplicated below, but this is included to give more

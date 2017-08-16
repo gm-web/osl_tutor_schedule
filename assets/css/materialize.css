@@ -3310,13 +3310,12 @@ input[type=range] + .thumb {
 span.badge {
   min-width: 3rem;
   padding: 0 6px;
-  margin-left: 14px;
   text-align: center;
   font-size: 1rem;
   line-height: 22px;
   height: 22px;
   color: #757575;
-  float: right;
+  float: left;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
 }
@@ -3327,10 +3326,6 @@ span.badge.new {
   color: #fff;
   background-color: #26a69a;
   border-radius: 2px;
-}
-
-span.badge.new:after {
-  content: " new";
 }
 
 span.badge[data-badge-caption]::after {

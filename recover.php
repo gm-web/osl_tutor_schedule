@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 include_once 'includes/db_connect.php';
+include_once 'includes/recover.inc.php';
 include_once 'includes/functions.php';
 
 sec_session_start();
@@ -32,25 +33,14 @@ if (login_check($mysqli) == true) {
         <title>Secure Login: Log In</title>
         <link rel="stylesheet" href="styles/main.css" />
         <script type="text/JavaScript" src="js/sha512.js"></script> 
-        <script type="text/JavaScript" src="js/forms.js"></script> 
+        <script type="text/JavaScript" src="js/recoveryforms.js"></script> 
     </head>
     <body>
-        <?php
-        if (isset($_GET['error'])) {
-            echo '<p class="error">Error Logging In!</p>';
-        }
-        ?> 
-        <form action="includes/process_login.php" method="post" name="login_form"> 			
+        <form action="includes/process_recovery.php" method="post" name="code_form"> 			
             Email: <input type="text" name="email" />
-            Password: <input type="password" 
-                             name="password" 
-                             id="password"/>
-            <input type="button" 
-                   value="Login" 
-                   onclick="formhash(this.form, this.form.password);" /> 
+            Code: <input type="text" name="password" id="password"/>
+            <input type="button" value="Login" onclick="formsub(this.form, this.form.email, this.form.password);" /> 
         </form>
-        <p>If you don't have a login, please <a href="register.php">register</a></p>
-        <p><a href="forgot.php">Forgot your password?</a></p>
-        <p>If you are done, please <a href="includes/logout.php">log out</a>.</p>
+        <p>Please enter the code you received in your email.</a></p>
     </body>
 </html>
