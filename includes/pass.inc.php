@@ -49,14 +49,14 @@ if (isset($_POST['p'], $_POST['val'])) {
         $stmt->execute();
         $stmt->store_result();
 
-        if ($stmt->num_rows == 1) {
+        /* if ($stmt->num_rows == 1) {
             echo "Email: ".$row['email']."<br>";
         }
         else {
             echo "No email exists<br>";
-        }
-        //$stmt->bind_result($email);
-        //$stmt->fetch();
+        } */
+        $stmt->bind_result($email);
+        $stmt->fetch();
         //echo $email."<br>";
 
     } else {
@@ -80,17 +80,17 @@ if (isset($_POST['p'], $_POST['val'])) {
             $update_stmt->bind_param('sss', $password, $random_salt, $email);
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
-                echo $password."\n";
-                echo $random_salt."\n";
-                echo $email;
-                //header('Location: ./error.php?err=Registration failure: UPDATE');
-                //exit();
+                //echo $password."\n";
+                //echo $random_salt."\n";
+                //echo $email;
+                header('Location: ./error.php?err=Registration failure: UPDATE');
+                exit();
             }
         }
-        echo "hashed password: ".$password."<br>";
-        echo "Random Salt: ".$random_salt."<br>";
-        echo "Email: ".$email;
-        //header('Location: ./register_success.php');
-        //exit();
+        //echo "hashed password: ".$password."<br>";
+        //echo "Random Salt: ".$random_salt."<br>";
+        //echo "Email: ".$email;
+        header('Location: ./register_success.php');
+        exit();
     }
 }

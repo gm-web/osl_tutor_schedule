@@ -48,7 +48,7 @@ sec_session_start();
             Confirm Password: <input type="password" 
                                      name="confirmpwd" 
                                      id="confirmpwd" /><br>
-            <input type="hidden" id="val" val="<?php echo $val;?>" />
+            <input type="hidden" id="val" name="val" value="<?php echo $val;?>" />
             <input type="button" 
                    value="Register" 
                    onclick="return newpass(this.form,

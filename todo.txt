@@ -17,3 +17,4 @@ Bugs:
 
 - Analyze security and test for SQL injections and XSS attacks.
 - Ensure that sessions end after closing windows.
+- Analyze code to ensure that after header() redirects, additional code isn't executed.
