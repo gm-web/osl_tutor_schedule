@@ -32,7 +32,7 @@ function formhash(form, password) {
     form.submit();
 }
 
-function regformhash(form, uid, email, password, conf) {
+function regformhash(form, uid, email, password, conf, type) {
     // Check each field has a value
     if (email.value == '' || uid.value == '' || password.value == '' || conf.value == '') {
         alert('You must provide all the requested details. Please try again');
@@ -40,9 +40,9 @@ function regformhash(form, uid, email, password, conf) {
     }
     
     // Check the username
-    re = /^\w+$/; 
+    re = /^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/; 
     if(!re.test(form.username.value)) { 
-        alert("Username must contain only letters, numbers and underscores. Please try again"); 
+        alert("Names may not contain special characters. Please try again"); 
         form.username.focus();
         return false; 
     }

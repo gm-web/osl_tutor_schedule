@@ -1,4 +1,4 @@
-	<?php include("includes/superadmin/sa_menu.php"); ?>
+	<?php include_once("includes/superadmin/sa_menu.php"); ?>
 	<div class="container" style="margin-top: 100px;">
 		<div class="row">
 			<div id="content">

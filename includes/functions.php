@@ -351,3 +351,4 @@ function list_users($mysqli) {
 		echo "</tbody></table>";
 	}
 }
+

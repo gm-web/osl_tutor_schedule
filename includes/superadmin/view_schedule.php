@@ -1,3 +1,9 @@
+<?php 
+	include_once 'includes/db_connect.php';
+	include_once 'includes/view_schedule.inc.php';
+	include_once 'includes/functions.php';
+?>
+
 <div class="col s12 m12 l12">
 	<form>
 		<div class="input-field col s12 m4 l4">
@@ -18,6 +24,9 @@
 				<th>Location</th>
 			</tr>
 		</thead>
+		<?php 
+
+		?>
 		<tbody>
 			<tr>
 				<td>Sunday</td>

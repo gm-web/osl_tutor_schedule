@@ -50,7 +50,7 @@ include_once 'includes/functions.php';
             <li>Your password and confirmation must match exactly</li>
         </ul>
         <form method="post" name="registration_form" action="<?php echo esc_url($_SERVER['PHP_SELF']); ?>">
-            Username: <input type='text' name='username' id='username' /><br>
+            Name: <input type='text' name='username' id='username' /><br>
             Email: <input type="text" name="email" id="email" /><br>
             Password: <input type="password"
                              name="password" 
@@ -58,13 +58,17 @@ include_once 'includes/functions.php';
             Confirm password: <input type="password" 
                                      name="confirmpwd" 
                                      id="confirmpwd" /><br>
+            <input type="radio" name="type" id="type" value="2" checked> Tutor<br>
+            <input type="radio" name="type" id="type" value="1"> Admin<br>
+            <input type="radio" name="type" id="type" value="0"> Superadmin<br>
             <input type="button" 
                    value="Register" 
                    onclick="return regformhash(this.form,
                                    this.form.username,
                                    this.form.email,
                                    this.form.password,
-                                   this.form.confirmpwd);" /> 
+                                   this.form.confirmpwd,
+                                   this.form.type);" /> 
         </form>
         <p>Return to the <a href="index.php">login page</a>.</p>
     </body>
