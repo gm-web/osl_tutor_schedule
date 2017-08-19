@@ -1,65 +1,53 @@
 <?php 
-	include_once 'includes/db_connect.php';
-	include_once 'includes/view_schedule.inc.php';
-	include_once 'includes/functions.php';
+	include_once '../../includes/db_connect.php';
+	include_once '../../includes/functions.php';
 ?>
+<script type="text/JavaScript" src="./js/schedule_form.js"></script>
+<!--  <script>
+// 	$('#loading_spinner').show();
+// 	$("#table_content").load("../../includes/superadmin/view_schedule.inc.php", function() {
+// 		$('#loading_spinner').hide();
+// 	});
+// </script> -->
 
 <div class="col s12 m12 l12">
-	<form>
+	<form method="submit" name="class_select" id="class_select">
 		<div class="input-field col s12 m4 l4">
-			<select>
-				<option value="" disabled selected>Select a class</option>
-				<option value="1">Option 1</option>
-				<option value="2">Option 2</option>
-				<option value="3">Option 3</option>
+			<select name="course">
+				<option value="0" selected>Select a class</option>
+				<option value="MATH131">MATH131</option>
+				<option value="MATH132">MATH132</option>
+				<option value="MATH231">MATH231</option>
 			</select>
-			<label>Class:</label>
+			<label>Jump to class:</label>
+			<input type="button" value="Select" onclick="return class_form(this.form, this.form.course);" />
 		</div>
-		</form>
-	<table>
-		<thead>
-			<tr>
-				<th>Day</th>
-				<th>Time</th>
-				<th>Location</th>
-			</tr>
-		</thead>
-		<?php 
-
+	</form>
+</div>
+<!-- <div class="col s12 m12 l12" id="loading_spinner" style="margin-top: 15%;">
+	<div class="center-align">
+		<div class="preloader-wrapper big active">
+			<div class="spinner-layer spinner-blue-only">
+				<div class="circle-clipper left">
+					<div class="circle"></div>
+				</div>
+				<div class="gap-patch">
+					<div class="circle"></div>
+				</div>
+				<div class="circle-clipper right">
+					<div class="circle"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> -->
+<div class="col s12 m12 l12">
+	<div class="table_content" id="table_content">
+		<?php
+			default_class($mysqli);
 		?>
-		<tbody>
-			<tr>
-				<td>Sunday</td>
-				<td>--:--</td>
-				<td>location</td>
-			</tr>
-			<tr>
-				<td>Monday</td>
-				<td>--:--</td>
-				<td>location</td>
-			</tr>
-			<tr>
-				<td>Tuesday</td>
-				<td>--:--</td>
-				<td>location</td>
-			</tr>
-			<tr>
-				<td>Wednesday</td>
-				<td>--:--</td>
-				<td>location</td>
-			</tr>
-			<tr>
-				<td>Thursday</td>
-				<td>--:--</td>
-				<td>location</td>
-			</tr>
-			<tr>
-				<td>Friday</td>
-				<td>--:--</td>
-				<td>location</td>
-			</tr>
-		</tbody>
-	</table>
+	</div>
+</div>
 	<script>
 		$(document).ready(function() {
 			$('select').material_select();

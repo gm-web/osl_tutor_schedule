@@ -15,16 +15,54 @@ function class_schedule($mysqli, $course) {
 		}
 		return $results;
 	}
-	// iterates through the days of the week
-	/* for ($i=0; $i <= 6; $i++) { 
-		// inside loop finds the blocks
-		// of time the class is tutored
-		$day_time = array(array());
-		$j = $result->num_rows();
-		for ($j = 1000; $j <= 1700; $j+= 30) {
-			while ($row = $result->fetch_assoc()) {
-				$day_time[]
-			}
+}
+
+
+function day_calc($d) {
+	if ($d == 0) {
+		return "Sunday";
+	}
+	elseif ($d == 1) {
+		return "Monday";
+	}
+	elseif ($d == 2) {
+		return "Tuesday";
+	}
+	elseif ($d == 3) {
+		return "Wednesday";
+	}
+	elseif ($d == 4) {
+		return "Thursday";
+	}
+	elseif ($d == 5) {
+		return "Friday";
+	}
+	else {
+		return "Error";
+	}
+}
+
+function create_table($results) {
+	if ($results->num_rows > 0) {
+		//echo "<p>Schedule for ".$row['class_id']."</p>";
+		echo "<table>
+				<thead>
+					<tr>
+						<th>Tutor</th>
+						<th>Day</th>
+						<th>Start Time</th>
+						<th>End Time</th>
+					</tr>
+				</thead>";
+		while ($row = $result->fetch_assoc()) {
+			echo 
+			"<tbody>
+				<tr>
+					<td>" . $row['username'] . "</td>
+					<td>" . day_calc($row['day']) . "</td>
+					<td>" . $row['start_time'] . "</td>
+					<td>" . $row['end_time'] . "</td></tr>";
 		}
-	} */
+		echo "</tbody></table>";
+	}
 }

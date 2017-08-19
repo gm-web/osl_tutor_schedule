@@ -46,7 +46,6 @@ sec_session_start();
 
 	<!-- Essential Scripts -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-
 </head>
 <body>
 	<?php 
@@ -75,5 +74,10 @@ sec_session_start();
 			echo '<p><span class="error">You are not authorized to access this page.</span> Please <a href="index.php">log in</a>.</p>';
 		}
 	?>
+	<script>
+		$(document).ready(function() {
+			$(".button-collapse").sideNav();
+		});
+	</script>
 </body>
 </html>

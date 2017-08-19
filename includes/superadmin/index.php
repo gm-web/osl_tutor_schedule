@@ -9,12 +9,11 @@
 	<script type="text/javascript" src="assets/js/materialize.min.js"></script>
 	<script>
 		$(document).ready(function() {
-			$(".button-collapse").sideNav();
 			$('.modal').modal();
 			$('select').material_select();
 
 		});
-		$(document).ready(function(){
+		$(document).ready(function() {
 			$("#view").click(function(){
 				$("#content").load("includes/superadmin/view_schedule.php");
 			});

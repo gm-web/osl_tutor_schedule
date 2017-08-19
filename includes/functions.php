@@ -320,7 +320,7 @@ function sa_check($mysqli) {
 }
 
 function list_users($mysqli) {
-	$stmt = "SELECT name FROM tutors";
+	$stmt = "SELECT username, email, status, level FROM members";
 	$result = $mysqli->query($stmt);
 	if($result->num_rows > 0) {
 		echo 
@@ -339,16 +339,162 @@ function list_users($mysqli) {
 			echo
 			"<tbody>
 				<tr>
-					<td>" . $row['name'] . "</td>
-					<td>" . /* $row['status'] */"<span class=\"new badge blue\">Current Tutor</span>" . "</td>
-					<td>" . /*$row['email']*/"example@domain.com" . "</td>
-					<td><a href=\"#\"><i class=\"material-icons\">event</i></a></td>
-					<td><a href=\"#\"><i class=\"material-icons\">view_list</i></a></td>
-					<td><a href=\"#\"><i class=\"material-icons\">create</i></a></td>
-				</tr>";
+					<td>" . $row['username'] . "</td>";
+			if (($row['status'] == 1 && $row['level'] == 0) || ($row['status'] == 1 && $row['level'] == 1)) {
+				echo "<td><span class=\"new badge green\">OSL Administrator</span></td>";
+			}
+			else if ($row['status'] == 1) {
+				echo "<td><span class=\"new badge blue\">Current Tutor</span></td>";
+			}
+			else if ($row['status'] == 0) {
+				echo "<td><span class=\"new badge red\">Former Tutor</span></td>";
+			}
+			else {
+				echo "<td><span class=\"new badge grey\">Unknown Error</span></td>";
+			}		
+				echo "<td>" . $row['email'] . "</td>
+				<td><a href=\"#\"><i class=\"material-icons\">event</i></a></td>
+				<td><a href=\"#\"><i class=\"material-icons\">view_list</i></a></td>
+				<td><a href=\"#\"><i class=\"material-icons\">create</i></a></td>
+			</tr>";
 
 		}
 		echo "</tbody></table>";
 	}
 }
 
+function default_class($mysqli) {
+	$stmt = "SELECT members.username, members.id, tutor_schedule.day, tutor_schedule.start_time, tutor_schedule.end_time, tutor_class.class_id FROM members, tutor_schedule, tutor_class WHERE tutor_class.tutor_id = tutor_schedule.tutor_id AND members.id = tutor_schedule.tutor_id AND tutor_class.class_id = 'MATH131' ORDER BY tutor_schedule.day, tutor_schedule.start_time ASC";
+	$result = $mysqli->query($stmt);
+	if($result->num_rows > 0) {
+		echo "<h5>MATH131</h5>";
+		echo "<table>
+				<thead>
+					<tr>
+						<th>Day</th>
+						<th>Time</th>
+					</tr>
+				</thead>";
+		$i = 0;
+		$s = array();
+		$m = array();
+		$t = array();
+		$w = array();
+		$tr = array();
+		$f = array();
+		while ($row = $result->fetch_assoc()) {
+			foreach ($row as $x => $value) {
+				if($x == 'day') {
+					if ($value == 0) {
+						$s[$i] = $row['start_time'];
+						$s[$i + 1] = $row['end_time'];
+						$i+=2;
+						//echo "i for sunday = ".$i."<br>";
+					}
+					else if ($value == 1) {
+						$m[$i] = $row['start_time'];
+						$m[$i + 1] = $row['end_time'];
+						$i+=2;
+					}
+					else if ($value == 2) {
+						$t[$i] = $row['start_time'];
+						$t[$i + 1] = $row['end_time'];
+						$i+=2;
+					}
+					else if ($value == 3) {
+						$w[$i] = $row['start_time'];
+						$w[$i + 1] = $row['end_time'];
+						$i+=2;
+					}
+					else if ($value == 4) {
+						$tr[$i] = $row['start_time'];
+						$tr[$i + 1] = $row['end_time'];
+						$i+=2;
+					}
+					else if ($value == 5) {
+						$f[$i] = $row['start_time'];
+						$f[$i + 1] = $row['end_time'];
+						$i+=2;
+					}
+				}
+			}
+		}
+		$Sunday = time_calc($s);
+		$Monday = time_calc($m);
+		$Tuesday = time_calc($t);
+		$Wednesday = time_calc($w);
+		$Thursday = time_calc($tr);
+		$Friday = time_calc($f);
+		echo
+			"<tbody>";
+			// echo "<tr>
+			// 	<td>Sunday</td><td>";
+			// 	//$times = array_values($Sunday);
+			// 	for ($j = 0; $j < count($Sunday) - 1; $j+=2) {
+			// 		echo $Sunday[$j]."-".$Sunday[$j+1]."<br>";
+			// 	}
+			// echo "</td>";
+			// echo "</tr>";
+			echo "<tr>
+				<td>Monday</td><td>";
+				//$times = array_values($Sunday);
+				for ($j = 0; $j < count($Monday) - 1; $j+=2) {
+					echo $Monday[$j]."-".$Monday[$j+1]."<br>";
+				}
+			echo "</td>";
+			echo "</tr>";
+		echo "</tbody></table>";
+	}
+}
+
+function time_calc($arr) {
+	$final_arr = array();
+	$j = 0;
+	$n = count($arr);
+	if (count($arr)  == 2) {
+		return $arr;
+	}
+	else {
+		$t_start = $arr[0];
+		$t_end = $arr[1];
+		for ($i = 0; $i < $n - 2; $i+=2) {
+			if ($arr[$i + 2] <= $t_end) {
+				$t_end = $arr[$i + 3]; //next end time
+			}
+			else {
+				$final_arr[$j] = $t_start;
+				$final_arr[$j+1] = $t_end;
+				$j+=2;
+				$t_start = $arr[$i + 2];
+				$t_end = $arr[$i + 3];
+			}
+		}
+		$final_arr[$j] = $t_start;
+		$final_arr[$j+1] = $t_end;
+	 	return $final_arr;
+	}
+}
+
+function day($d) {
+	if ($d == 0) {
+		return "Sunday";
+	}
+	elseif ($d == 1) {
+		return "Monday";
+	}
+	elseif ($d == 2) {
+		return "Tuesday";
+	}
+	elseif ($d == 3) {
+		return "Wednesday";
+	}
+	elseif ($d == 4) {
+		return "Thursday";
+	}
+	elseif ($d == 5) {
+		return "Friday";
+	}
+	else {
+		return "Error";
+	}
+}
